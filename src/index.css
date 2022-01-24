@@ -22,3 +22,7 @@ body {
 .img2:hover{
     transform: rotate(-1deg);
 }
+.nav-link {
+    background: none;
+    border: none;
+}

@@ -3,7 +3,7 @@ const Homepage = () => {
     <div className="container-fluid w-75">
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div className="container-fluid mt-3">
-          <a className="navbar-brand mb-0 h1" href="#">
+          <a className="navbar-brand mb-0 h1" href="/">
             <img
               src="../images/travel-app.png"
               alt=""
@@ -27,29 +27,35 @@ const Homepage = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className="nav-item dropdown">
-                <a
+                <button
                   className="nav-link dropdown-toggle h4"
-                  href="#"
                   id="navbarDropdown"
-                  role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   Get Started
-                </a>
+                </button>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Login
-                    </a>
+                    <button
+                      className="dropdown-item btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signup"
+                    >
+                      Sign Up
+                    </button>
                   </li>
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <a className="dropdown-item" href="#">
-                      Sign Up
-                    </a>
+                    <button
+                      className="dropdown-item btn"
+                      data-bs-toggle="modal"
+                      data-bs-target="#login"
+                    >
+                      Login
+                    </button>
                   </li>
                 </ul>
               </li>
