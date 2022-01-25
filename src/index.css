@@ -26,3 +26,11 @@ body {
     background: none;
     border: none;
 }
+
+/* Login/Signup */
+.account {
+    min-height: 100vh;
+}
+.card {
+    width: 500px;
+}

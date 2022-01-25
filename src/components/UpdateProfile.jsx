@@ -2,53 +2,48 @@ import React, { useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
-const Signup = () => {
-  const initialFormValues = {
-    email: "",
-    password: "",
-    passwordConfirm: "",
-  };
+const UpdateProfile = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+  const { currentUser, updateEmail, updatePassword } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState(initialFormValues);
   const navigate = useNavigate();
 
-  const onChange = (e) => {
-    setFormValues({
-      ...formValues,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError("Passwords do not match");
     }
 
-    try {
-      setError("");
-      setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
-      navigate("/dashboard");
-    } catch {
-      setError("Failed to create account");
+    const promises = [];
+    setLoading(true);
+    setError("");
+    if (emailRef.current.value !== currentUser.email) {
+      promises.push(updateEmail(emailRef.current.value));
+    }
+    if (passwordRef.current.value) {
+      promises.push(updatePassword(passwordRef.current.value));
     }
 
-    setLoading(false);
-    setFormValues(initialFormValues);
+    Promise.all(promises)
+      .then(() => {
+        navigate("/profile");
+      })
+      .catch(() => {
+        setError("Failed to update account");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (
     <div className="container d-flex align-items-center justify-content-center account">
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title text-center">Sign Up</h5>
+          <h5 className="card-title text-center">Update Profile</h5>
           <form onSubmit={handleSubmit}>
             <div className="form-group" id="email">
               <label htmlFor="email-input">Email</label>
@@ -57,14 +52,9 @@ const Signup = () => {
                 type="email"
                 ref={emailRef}
                 className="form-control"
-                value={formValues.email}
-                onChange={onChange}
-                name="email"
+                defaultValue={currentUser.email}
                 required
               />
-              <small id="emailHelp" className="form-text text-muted">
-                We'll never share your email with anyone else.
-              </small>
             </div>
             <div className="form-group mt-3" id="password">
               <label htmlFor="password-input">Password</label>
@@ -73,10 +63,7 @@ const Signup = () => {
                 type="password"
                 ref={passwordRef}
                 className="form-control"
-                value={formValues.password}
-                onChange={onChange}
-                name="password"
-                required
+                placeholder="Leave blank to keep the same"
               />
             </div>
             <div className="form-group mt-3" id="password-confirm">
@@ -88,10 +75,7 @@ const Signup = () => {
                 type="password"
                 ref={passwordConfirmRef}
                 className="form-control"
-                value={formValues.passwordConfirm}
-                onChange={onChange}
-                name="passwordConfirm"
-                required
+                placeholder="Leave blank to keep the same"
               />
             </div>
             {error && (
@@ -104,13 +88,12 @@ const Signup = () => {
               type="submit"
               className="btn mt-5 w-100 btn-primary"
             >
-              Sign Up
+              Update
             </button>
           </form>
-          <div className="text-center mt-2 mb-4">
-            Already have an account?
-            <Link className="btn" to="/login">
-              Login
+          <div className="text-center mt-3 mb-4">
+            <Link className="btn" to="/dashboard">
+              Cancel
             </Link>
           </div>
         </div>
@@ -119,4 +102,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default UpdateProfile;

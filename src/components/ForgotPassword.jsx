@@ -1,19 +1,17 @@
 import React, { useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const Login = () => {
+const ForgotPassword = () => {
   const initialFormValues = {
     email: "",
-    password: "",
   };
   const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login } = useAuth();
+  const { resetPassword } = useAuth();
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
-  const navigate = useNavigate();
 
   const onChange = (e) => {
     setFormValues({
@@ -26,12 +24,13 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setMessage("");
       setError("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      navigate("/dashboard");
+      await resetPassword(emailRef.current.value);
+      setMessage("Check your inbox for further instructions");
     } catch {
-      setError("Failed to login");
+      setError("Failed to reset password");
     }
 
     setLoading(false);
@@ -42,7 +41,7 @@ const Login = () => {
     <div className="container d-flex align-items-center justify-content-center account">
       <div className="card">
         <div className="card-body">
-          <h5 className="card-title text-center">Login</h5>
+          <h5 className="card-title text-center">Password Reset</h5>
           <form onSubmit={handleSubmit}>
             <div className="form-group" id="email">
               <label htmlFor="email-input">Email</label>
@@ -57,34 +56,28 @@ const Login = () => {
                 required
               />
             </div>
-            <div className="form-group mt-3" id="password">
-              <label htmlFor="password-input">Password</label>
-              <input
-                id="password-input"
-                type="password"
-                ref={passwordRef}
-                className="form-control"
-                value={formValues.password}
-                onChange={onChange}
-                name="password"
-                required
-              />
-            </div>
             {error && (
               <div className="alert alert-danger mt-4" role="alert">
                 {error}
               </div>
             )}
-            <div className="text-center mt-2">
-              <Link to="/forgot-password">Forgot Password?</Link>
-            </div>
+            {message && (
+              <div className="alert alert-success mt-4" role="alert">
+                {message}
+              </div>
+            )}
             <button
               disabled={loading}
               type="submit"
-              className="btn mt-5 w-100 btn-primary"
+              className="btn mt-3 w-100 btn-primary"
             >
-              Login
+              Reset Password
             </button>
+            <div className="text-center mt-4">
+              <Link className="btn" to="/login">
+                Login
+              </Link>
+            </div>
           </form>
           <div className="text-center mt-2 mb-4">
             Don't have an account?
@@ -98,4 +91,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Homepage = () => {
   return (
     <div className="container-fluid w-75">
@@ -37,25 +39,17 @@ const Homepage = () => {
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
-                    <button
-                      className="dropdown-item btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signup"
-                    >
+                    <Link className="dropdown-item" to="/signup">
                       Sign Up
-                    </button>
+                    </Link>
                   </li>
                   <li>
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <button
-                      className="dropdown-item btn"
-                      data-bs-toggle="modal"
-                      data-bs-target="#login"
-                    >
+                    <Link className="dropdown-item" to="/login">
                       Login
-                    </button>
+                    </Link>
                   </li>
                 </ul>
               </li>
