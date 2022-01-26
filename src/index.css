@@ -34,3 +34,12 @@ body {
 .card {
     width: 500px;
 }
+
+/* Dashboard */
+.add:hover {
+    transform: scale(1.2);
+    transition: all .2s ease-in-out;
+}
+.add {
+    transition: all .2s ease-in-out;
+}

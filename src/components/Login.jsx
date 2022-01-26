@@ -9,11 +9,12 @@ const Login = () => {
   };
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth();
+  const { login, currentUser } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const navigate = useNavigate();
+  const id = currentUser.uid;
 
   const onChange = (e) => {
     setFormValues({
@@ -29,7 +30,7 @@ const Login = () => {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      navigate("/dashboard");
+      navigate(`/dashboard/${id}`);
     } catch {
       setError("Failed to login");
     }

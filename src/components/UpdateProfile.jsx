@@ -10,6 +10,7 @@ const UpdateProfile = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const id = currentUser.uid;
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -92,7 +93,7 @@ const UpdateProfile = () => {
             </button>
           </form>
           <div className="text-center mt-3 mb-4">
-            <Link className="btn" to="/dashboard">
+            <Link className="btn" to={`/dashboard/${id}`}>
               Cancel
             </Link>
           </div>

@@ -6,6 +6,7 @@ const Profile = () => {
   const [error, setError] = useState("");
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const id = currentUser.uid;
 
   async function handleLogout() {
     setError("");
@@ -32,7 +33,7 @@ const Profile = () => {
             </div>
           )}
           <div className="text-center mt-4 mb-3">
-            <Link className="btn" to="/dashboard">
+            <Link className="btn" to={`/dashboard/${id}`}>
               Back to Dashboard
             </Link>
           </div>

@@ -15,7 +15,7 @@ const Dashboard = () => {
     }
   }
   return (
-    <div className="container-fluid w-75">
+    <div className="container-fluid w-75 account">
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div className="container-fluid mt-3">
           <h1 className="navbar-brand mb-0">
@@ -26,7 +26,7 @@ const Dashboard = () => {
               height="29"
               className="d-inline-block align-text-top"
             />
-            Welcome
+            Travel Pal
           </h1>
           <button
             className="navbar-toggler"
@@ -48,7 +48,13 @@ const Dashboard = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  My Account
+                  <img
+                    src="../images/account2.png"
+                    alt=""
+                    width="35"
+                    height="35"
+                    className="d-inline-block align-text-top"
+                  />
                 </button>
                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li>
@@ -74,6 +80,25 @@ const Dashboard = () => {
           </div>
         </div>
       </nav>
+      <div className="text-center mt-5 text-light welcome">
+        <h1>Your Trips</h1>
+      </div>
+      <div className="d-flex align-items-center justify-content-center mt-3">
+        <button
+          className="btn"
+          onClick={() => {
+            navigate("/create-trip");
+          }}
+        >
+          <img
+            src="../images/add.png"
+            alt=""
+            width="35"
+            height="35"
+            className="add"
+          />
+        </button>
+      </div>
     </div>
   );
 };

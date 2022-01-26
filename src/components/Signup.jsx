@@ -11,11 +11,12 @@ const Signup = () => {
   const emailRef = useRef();
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
-  const { signup } = useAuth();
+  const { signup, currentUser } = useAuth();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const navigate = useNavigate();
+  const id = currentUser.uid;
 
   const onChange = (e) => {
     setFormValues({
@@ -35,7 +36,7 @@ const Signup = () => {
       setError("");
       setLoading(true);
       await signup(emailRef.current.value, passwordRef.current.value);
-      navigate("/dashboard");
+      navigate(`/dashboard/${id}`);
     } catch {
       setError("Failed to create account");
     }

@@ -5,6 +5,7 @@ import Dashboard from "./components/Dashboard";
 import Profile from "./components/Profile";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
+import CreateTrip from "./components/CreateTrip";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -17,7 +18,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route
-            path="/dashboard"
+            path="/dashboard/:id"
             element={
               <PrivateRoute>
                 <Dashboard />
@@ -37,6 +38,14 @@ function App() {
             element={
               <PrivateRoute>
                 <UpdateProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/create-trip"
+            element={
+              <PrivateRoute>
+                <CreateTrip />
               </PrivateRoute>
             }
           />
