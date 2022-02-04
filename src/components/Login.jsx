@@ -14,7 +14,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const navigate = useNavigate();
-  const id = currentUser.uid;
 
   const onChange = (e) => {
     setFormValues({
@@ -30,6 +29,7 @@ const Login = () => {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      const id = currentUser.uid;
       navigate(`/dashboard/${id}`);
     } catch {
       setError("Failed to login");

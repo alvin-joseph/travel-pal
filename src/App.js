@@ -6,6 +6,7 @@ import Profile from "./components/Profile";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
 import CreateTrip from "./components/CreateTrip";
+import TripPage from "./components/TripPage";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -21,7 +22,7 @@ function App() {
             path="/dashboard/:id"
             element={
               <PrivateRoute>
-                <Dashboard />
+                <TripPage />
               </PrivateRoute>
             }
           />
