@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { projectFirestore, projectStorage, timestamp } from "../firebase";
 
 const CreateTrip = () => {
   const initialFormValues = {
@@ -8,14 +9,13 @@ const CreateTrip = () => {
     tripLocation: "",
     tripStartDate: "",
     tripEndDate: "",
+    coverPhoto: "default",
   };
   const { currentUser } = useAuth();
-  const [error, setError] = useState("");
-  const [formValues, setFormValues] = useState(initialFormValues);
-  const [file, setFile] = useState(null);
+  const [coverPhotoUrl, setCoverPhotoUrl] = useState(null);
   const navigate = useNavigate();
-  const types = ["image/png", "image/jpeg"];
   const id = currentUser.uid;
+  const [formValues, setFormValues] = useState(initialFormValues);
 
   const onChange = (e) => {
     setFormValues({
@@ -24,36 +24,30 @@ const CreateTrip = () => {
     });
   };
 
+  useEffect(() => {
+    const storageRef = projectStorage.ref(
+      formValues.coverPhoto.toLowerCase() + ".jpg"
+    );
+
+    const getUrl = async () => {
+      const url = await storageRef.getDownloadURL();
+      setCoverPhotoUrl(url);
+    };
+
+    getUrl();
+  }, [formValues.coverPhoto]);
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    // if (passwordRef.current.value !== passwordConfirmRef.current.value) {
-    //   return setError("Passwords do not match");
-    // }
-
-    // try {
-    //   setError("");
-    //   setLoading(true);
-    //   await signup(emailRef.current.value, passwordRef.current.value);
-    //   navigate(`/dashboard/${id}`);
-    // } catch {
-    //   setError("Failed to create account");
-    // }
-
-    // setLoading(false);
-    // setFormValues(initialFormValues);
+    const createdAt = timestamp();
+    await projectFirestore
+      .collection("userData")
+      .doc(id)
+      .collection("trips")
+      .add({ ...formValues, createdAt, coverPhotoUrl });
+    setFormValues(initialFormValues);
+    setCoverPhotoUrl(null);
   }
-
-  const changeHandler = (e) => {
-    let selected = e.target.files[0];
-    if (selected && types.includes(selected.type)) {
-      setFile(selected);
-      setError("");
-    } else {
-      setFile(null);
-      setError("Please select an image file (png or jpeg)");
-    }
-  };
 
   return (
     <div className="container d-flex align-items-center justify-content-center account">
@@ -73,24 +67,34 @@ const CreateTrip = () => {
                 required
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="tripCoverPhoto" className="w-100 mt-3">
-                Upload Cover Photo
-              </label>
-              <input
-                id="tripCoverPhoto"
-                type="file"
-                className="form-control-file"
-                onChange={changeHandler}
-              />
-              {error && (
-                <div
-                  className="text-center alert alert-danger mt-4"
-                  role="alert"
+            <div className="row">
+              <div className="form-group col-6">
+                <label htmlFor="tripCoverPhoto" className="w-100 mt-3">
+                  Pick Cover Photo
+                </label>
+                <select
+                  id="tripCoverPhoto"
+                  type="file"
+                  className="form-control-file"
+                  name="coverPhoto"
+                  value={formValues.coverPhoto}
+                  onChange={onChange}
                 >
-                  {error}
-                </div>
-              )}
+                  <option defaultValue="default">Default</option>
+                  <option value="beach">Beach</option>
+                  <option value="city">City</option>
+                  <option value="outdoors">Outdoors</option>
+                  <option value="resort">Resort</option>
+                  <option value="family">Family</option>
+                </select>
+              </div>
+              <div className="col-6 mt-3">
+                <img
+                  className="img-thumbnail"
+                  src={coverPhotoUrl}
+                  alt="trip cover"
+                />
+              </div>
             </div>
             <div className="form-group mt-3">
               <label htmlFor="tripLocation">Trip location</label>

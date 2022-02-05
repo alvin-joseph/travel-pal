@@ -22,6 +22,14 @@ function App() {
             path="/dashboard/:id"
             element={
               <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/trip/:id"
+            element={
+              <PrivateRoute>
                 <TripPage />
               </PrivateRoute>
             }

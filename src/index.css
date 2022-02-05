@@ -49,6 +49,14 @@ body {
 .add {
     transition: all .2s ease-in-out;
 }
+.img-container {
+    position: relative;
+}
+.delete-trip {
+    position: absolute;
+    top: 18%;
+    left: 83%;
+}
 
 /* TripPage */
 .trip-form{
@@ -118,8 +126,7 @@ body {
     background-color: rgba(0, 0, 0, .1);
 }
 .delete-img {
-    width: 100%;
-    background: none;
-    border: none;
-    margin: auto;
+    position: absolute;
+    top: 8%;
+    left: 82%;
 }

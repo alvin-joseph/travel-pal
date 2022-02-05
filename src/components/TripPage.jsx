@@ -11,10 +11,11 @@ const TripPage = () => {
   const [error, setError] = useState("");
   const [file, setFile] = useState(null);
   const [clickedId, setClickedId] = useState("");
-  const { logout } = useAuth();
+  const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
   const types = ["image/png", "image/jpeg"];
   const { docs } = useFirestore("images");
+  const id = currentUser.uid;
 
   async function handleLogout() {
     try {
@@ -55,7 +56,7 @@ const TripPage = () => {
               height="29"
               className="d-inline-block align-text-top"
             />
-            Travel Pal
+            Welcome to Travel Pal
           </h1>
           <button
             className="navbar-toggler"
@@ -103,6 +104,14 @@ const TripPage = () => {
                       Logout
                     </Link>
                   </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to={`/dashboard/${id}`}>
+                      Back to Dashboard
+                    </Link>
+                  </li>
                 </ul>
               </li>
             </ul>
@@ -146,7 +155,10 @@ const TripPage = () => {
       <div className="row">
         {docs &&
           docs.map((doc) => (
-            <div className="col-lg-3 col-md-6 col-sm-12" key={doc.id}>
+            <div
+              className="col-lg-3 col-md-6 col-sm-12 img-container"
+              key={doc.id}
+            >
               <motion.div
                 layout
                 whileHover={{ opacity: 1 }}
@@ -165,16 +177,9 @@ const TripPage = () => {
                 />
               </motion.div>
               <button
-                className="delete-img mb-4"
+                className="delete-img mb-4 btn-close"
                 onClick={() => handleDelete(doc.id)}
-              >
-                <img
-                  src="../images/trash.png"
-                  alt="trash"
-                  width="25"
-                  height="25"
-                />
-              </button>
+              ></button>
             </div>
           ))}
       </div>

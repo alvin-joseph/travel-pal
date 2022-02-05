@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
 import { projectFirestore } from "../firebase";
 
-const useFirestore = (collection) => {
+const useFirestore = () => {
   const [docs, setDocs] = useState([]);
+  const { currentUser } = useAuth();
+  const id = currentUser.uid;
 
   useEffect(() => {
     const unsub = projectFirestore
-      .collection(collection)
+      .collection("userData")
+      .doc(id)
+      .collection("trips")
       .orderBy("createdAt", "desc")
       .onSnapshot((snap) => {
         let documents = [];
@@ -17,8 +22,7 @@ const useFirestore = (collection) => {
       });
 
     return () => unsub();
-  }, [collection]);
-
+  }, [id]);
   return { docs };
 };
 
