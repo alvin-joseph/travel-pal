@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import ProgressBar from "./ProgressBar";
 import SelectedImage from "./SelectedImage";
 import useFirestore from "../hooks/useFirestore";
@@ -6,6 +6,8 @@ import useFirestoreImages from "../hooks/useFirestoreImages";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
+import { projectFirestore, projectStorage } from "../firebase";
+import { format, parseISO } from "date-fns";
 
 const TripPage = () => {
   const [error, setError] = useState("");
@@ -32,8 +34,16 @@ const TripPage = () => {
     setClickedId(id);
   };
 
-  const handleDelete = (id) => {
-    // projectFirestore.collection("images").doc(id).delete();
+  const handleDelete = (id, fileName) => {
+    projectFirestore
+      .collection("userData")
+      .doc(userId)
+      .collection("trips")
+      .doc(tripId)
+      .collection("images")
+      .doc(id)
+      .delete();
+    projectStorage.ref(fileName).delete();
   };
 
   const changeHandler = (e) => {
@@ -126,6 +136,10 @@ const TripPage = () => {
           .map((doc) => (
             <div key={doc.id} className="text-center mt-5 text-light welcome">
               <h1>{doc.tripName}</h1>
+              <h2>
+                {format(parseISO(doc.tripStartDate), "MMM do, yyyy")} -{" "}
+                {format(parseISO(doc.tripEndDate), "MMM do, yyyy")}
+              </h2>
             </div>
           ))}
       <div className="mt-5 text-light welcome">
@@ -185,7 +199,7 @@ const TripPage = () => {
               </motion.div>
               <button
                 className="delete-img btn-close"
-                onClick={() => handleDelete(pic.id)}
+                onClick={() => handleDelete(pic.id, pic.fileName)}
               ></button>
             </div>
           ))}
@@ -193,7 +207,7 @@ const TripPage = () => {
       <SelectedImage
         clickedId={clickedId}
         setClickedId={setClickedId}
-        docs={pics}
+        pics={pics}
       />
     </div>
   );

@@ -25,7 +25,14 @@ const Dashboard = () => {
   }
 
   const handleDelete = (id) => {
-    collectionRef.doc(id).delete();
+    const confirm = window.confirm(
+      "Are you sure you want to delete this trip? You will lose all saved trip data"
+    );
+    if (confirm) {
+      collectionRef.doc(id).delete();
+    } else {
+      return;
+    }
   };
 
   const handleClick = (id) => {

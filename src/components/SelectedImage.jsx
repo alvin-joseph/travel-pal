@@ -1,6 +1,6 @@
 import React from "react";
 
-const SelectedImage = ({ clickedId, setClickedId, docs }) => {
+const SelectedImage = ({ clickedId, setClickedId, pics }) => {
   const handleClick = () => {
     setClickedId("");
     Array.from(document.querySelectorAll(".carousel-item.active")).forEach(
@@ -15,7 +15,8 @@ const SelectedImage = ({ clickedId, setClickedId, docs }) => {
       tabIndex="-1"
       aria-hidden="true"
       role="dialog"
-      onClick={handleClick}
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
     >
       <div
         className="modal-dialog modal-dialog-centered modal-lg"
@@ -38,17 +39,17 @@ const SelectedImage = ({ clickedId, setClickedId, docs }) => {
               data-bs-ride="carousel"
             >
               <div className="carousel-inner">
-                {docs &&
-                  docs.map((doc) => (
+                {pics &&
+                  pics.map((pic) => (
                     <div
                       className={`carousel-item ${
-                        clickedId === doc.id ? "active" : ""
+                        clickedId === pic.id ? "active" : ""
                       }`}
-                      key={doc.id}
+                      key={pic.id}
                     >
                       <img
                         className="d-block w-100"
-                        src={doc.url}
+                        src={pic.url}
                         alt="full-size"
                       />
                     </div>
@@ -81,9 +82,11 @@ const SelectedImage = ({ clickedId, setClickedId, docs }) => {
             </div>
           </div>
           <div className="modal-footer">
-            <p className="mx-auto" id="exampleModalLabel">
-              (Place mouse over photo to pause)
-            </p>
+            {pics.length > 1 ? (
+              <p className="mx-auto" id="exampleModalLabel">
+                (Place mouse over photo to pause)
+              </p>
+            ) : null}
             <button
               type="button"
               className="btn btn-secondary"

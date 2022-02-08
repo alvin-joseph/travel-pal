@@ -17,7 +17,6 @@ const useStorageImages = (file, id) => {
       .collection("trips")
       .doc(id)
       .collection("images");
-    console.log(id);
 
     storageRef.put(file).on(
       "state_changed",
@@ -31,7 +30,7 @@ const useStorageImages = (file, id) => {
       async () => {
         const url = await storageRef.getDownloadURL();
         const createdAt = timestamp();
-        await collectionRef.add({ url, createdAt });
+        await collectionRef.add({ url, createdAt, fileName: file.name });
         setUrl(url);
       }
     );
