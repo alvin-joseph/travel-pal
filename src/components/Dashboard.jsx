@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { projectFirestore } from "../firebase";
@@ -41,11 +41,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     docs &&
-      docs.map((doc) => {
-        return collectionRef
-          .doc(doc.id)
-          .set({ tripId: doc.id }, { merge: true });
-      });
+      docs.map((doc) =>
+        collectionRef.doc(doc.id).set({ tripId: doc.id }, { merge: true })
+      );
   }, [collectionRef, docs]);
 
   return (
@@ -149,7 +147,17 @@ const Dashboard = () => {
                   onClick={() => handleClick(doc.id)}
                 />
               </motion.div>
-              <h4 className="mb-5">Location: {doc.tripLocation}</h4>
+              <div className="d-flex justify-content-between">
+                <h4 className="mb-5">Location: {doc.tripLocation}</h4>
+                <Link className="btn" to={`/edit-trip/${doc.tripId}`}>
+                  <img
+                    src="../images/edit.png"
+                    alt="edit-trip"
+                    width="35"
+                    height="35"
+                  />
+                </Link>
+              </div>
               <button
                 className="delete-trip btn-close"
                 onClick={() => handleDelete(doc.id)}

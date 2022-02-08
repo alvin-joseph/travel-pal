@@ -9,6 +9,7 @@ import CreateTrip from "./components/CreateTrip";
 import TripPage from "./components/TripPage";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
+import EditTrip from "./components/EditTrip";
 
 function App() {
   return (
@@ -55,6 +56,14 @@ function App() {
             element={
               <PrivateRoute>
                 <CreateTrip />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-trip/:tripId"
+            element={
+              <PrivateRoute>
+                <EditTrip />
               </PrivateRoute>
             }
           />
