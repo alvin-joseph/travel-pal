@@ -27,7 +27,7 @@ function App() {
             }
           />
           <Route
-            path="/trip/:id"
+            path="/trip/:tripId"
             element={
               <PrivateRoute>
                 <TripPage />

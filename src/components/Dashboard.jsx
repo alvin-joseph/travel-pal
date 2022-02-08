@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { projectFirestore } from "../firebase";
@@ -32,6 +32,15 @@ const Dashboard = () => {
     navigate(`/trip/${id}`);
   };
 
+  useEffect(() => {
+    docs &&
+      docs.map((doc) => {
+        return collectionRef
+          .doc(doc.id)
+          .set({ tripId: doc.id }, { merge: true });
+      });
+  }, [collectionRef, docs]);
+
   return (
     <div className="container-fluid w-75 account">
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
@@ -44,7 +53,7 @@ const Dashboard = () => {
               height="29"
               className="d-inline-block align-text-top"
             />
-            Welcome to Travel Pal
+            Welcome
           </h1>
           <button
             className="navbar-toggler"
@@ -115,7 +124,7 @@ const Dashboard = () => {
         {docs &&
           docs.map((doc) => (
             <div
-              className="col-lg-3 col-md-6 col-sm-12 img-container"
+              className="col-lg-4 col-md-6 col-sm-12 img-container"
               key={doc.id}
             >
               <h3 className="text-center mt-2">{doc.tripName}</h3>
@@ -133,9 +142,9 @@ const Dashboard = () => {
                   onClick={() => handleClick(doc.id)}
                 />
               </motion.div>
-              <h4>Location: {doc.tripLocation}</h4>
+              <h4 className="mb-5">Location: {doc.tripLocation}</h4>
               <button
-                className="delete-trip mb-4 btn-close"
+                className="delete-trip btn-close"
                 onClick={() => handleDelete(doc.id)}
               ></button>
             </div>

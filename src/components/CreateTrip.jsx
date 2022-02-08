@@ -35,6 +35,7 @@ const CreateTrip = () => {
     };
 
     getUrl();
+    return () => setCoverPhotoUrl();
   }, [formValues.coverPhoto]);
 
   async function handleSubmit(e) {
@@ -47,6 +48,7 @@ const CreateTrip = () => {
       .add({ ...formValues, createdAt, coverPhotoUrl });
     setFormValues(initialFormValues);
     setCoverPhotoUrl(null);
+    navigate(`/dashboard/${id}`);
   }
 
   return (

@@ -16,7 +16,6 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [formValues, setFormValues] = useState(initialFormValues);
   const navigate = useNavigate();
-  const id = currentUser.uid;
 
   const onChange = (e) => {
     setFormValues({
@@ -35,8 +34,8 @@ const Signup = () => {
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
-      navigate(`/dashboard/${id}`);
+      await signup(emailRef.current.value.trim(), passwordRef.current.value);
+      navigate(`/dashboard/${currentUser.uid}`);
     } catch {
       setError("Failed to create account");
     }

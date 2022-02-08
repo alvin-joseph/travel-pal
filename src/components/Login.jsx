@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -28,16 +28,22 @@ const Login = () => {
     try {
       setError("");
       setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
+      await login(emailRef.current.value.trim(), passwordRef.current.value);
       const id = currentUser.uid;
       navigate(`/dashboard/${id}`);
+      setFormValues(initialFormValues);
     } catch {
       setError("Failed to login");
     }
 
     setLoading(false);
-    setFormValues(initialFormValues);
   }
+
+  useEffect(() => {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    return () => login(email.trim(), password);
+  }, [login]);
 
   return (
     <div className="container d-flex align-items-center justify-content-center account">

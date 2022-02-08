@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProgressBar from "./ProgressBar";
 import SelectedImage from "./SelectedImage";
 import useFirestore from "../hooks/useFirestore";
-import { projectFirestore } from "../firebase";
-import { Link, useNavigate } from "react-router-dom";
+import useFirestoreImages from "../hooks/useFirestoreImages";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { motion } from "framer-motion";
 
@@ -14,8 +14,10 @@ const TripPage = () => {
   const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
   const types = ["image/png", "image/jpeg"];
-  const { docs } = useFirestore("images");
-  const id = currentUser.uid;
+  const { docs } = useFirestore();
+  const { tripId } = useParams();
+  const { pics } = useFirestoreImages(tripId);
+  const userId = currentUser.uid;
 
   async function handleLogout() {
     try {
@@ -31,7 +33,7 @@ const TripPage = () => {
   };
 
   const handleDelete = (id) => {
-    projectFirestore.collection("images").doc(id).delete();
+    // projectFirestore.collection("images").doc(id).delete();
   };
 
   const changeHandler = (e) => {
@@ -56,7 +58,7 @@ const TripPage = () => {
               height="29"
               className="d-inline-block align-text-top"
             />
-            Welcome to Travel Pal
+            Welcome
           </h1>
           <button
             className="navbar-toggler"
@@ -108,7 +110,7 @@ const TripPage = () => {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className="dropdown-item" to={`/dashboard/${id}`}>
+                    <Link className="dropdown-item" to={`/dashboard/${userId}`}>
                       Back to Dashboard
                     </Link>
                   </li>
@@ -118,9 +120,14 @@ const TripPage = () => {
           </div>
         </div>
       </nav>
-      <div className="text-center mt-5 text-light welcome">
-        <h1>Trip Name</h1>
-      </div>
+      {docs &&
+        docs
+          .filter((doc) => doc.tripId === tripId)
+          .map((doc) => (
+            <div key={doc.id} className="text-center mt-5 text-light welcome">
+              <h1>{doc.tripName}</h1>
+            </div>
+          ))}
       <div className="mt-5 text-light welcome">
         <h3>
           <u>Photos</u>
@@ -148,27 +155,27 @@ const TripPage = () => {
             </div>
           )}
           <div className="output">
-            {file && <ProgressBar file={file} setFile={setFile} />}
+            {file && <ProgressBar file={file} setFile={setFile} id={tripId} />}
           </div>
         </div>
       </form>
       <div className="row">
-        {docs &&
-          docs.map((doc) => (
+        {pics &&
+          pics.map((pic) => (
             <div
               className="col-lg-3 col-md-6 col-sm-12 img-container"
-              key={doc.id}
+              key={pic.id}
             >
               <motion.div
                 layout
                 whileHover={{ opacity: 1 }}
                 className="img-wrap"
-                onClick={() => handleClick(doc.id)}
+                onClick={() => handleClick(pic.id)}
                 data-bs-toggle="modal"
                 data-bs-target="#trip-img"
               >
                 <motion.img
-                  src={doc.url}
+                  src={pic.url}
                   alt="my trip"
                   data-bs-target="#trip-carousel"
                   initial={{ opacity: 0 }}
@@ -177,8 +184,8 @@ const TripPage = () => {
                 />
               </motion.div>
               <button
-                className="delete-img mb-4 btn-close"
-                onClick={() => handleDelete(doc.id)}
+                className="delete-img btn-close"
+                onClick={() => handleDelete(pic.id)}
               ></button>
             </div>
           ))}
@@ -186,7 +193,7 @@ const TripPage = () => {
       <SelectedImage
         clickedId={clickedId}
         setClickedId={setClickedId}
-        docs={docs}
+        docs={pics}
       />
     </div>
   );
