@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import ProgressBar from "./ProgressBar";
 import SelectedImage from "./SelectedImage";
+import CreateNote from "./CreateNote";
+import Notes from "./Notes";
+import Images from "./Images";
 import useFirestore from "../hooks/useFirestore";
-import useFirestoreImages from "../hooks/useFirestoreImages";
+import useFirestoreTripData from "../hooks/useFirestoreTripData";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { motion } from "framer-motion";
-import { projectFirestore, projectStorage } from "../firebase";
+import { projectFirestore } from "../firebase";
 import { format, parseISO } from "date-fns";
 
 const TripPage = () => {
@@ -18,8 +20,13 @@ const TripPage = () => {
   const types = ["image/png", "image/jpeg"];
   const { docs } = useFirestore();
   const { tripId } = useParams();
-  const { pics } = useFirestoreImages(tripId);
+  const { tripData } = useFirestoreTripData(tripId, "images");
   const userId = currentUser.uid;
+  const collectionRef = projectFirestore
+    .collection("userData")
+    .doc(userId)
+    .collection("trips")
+    .doc(tripId);
 
   async function handleLogout() {
     try {
@@ -29,22 +36,6 @@ const TripPage = () => {
       alert("Failed to log out");
     }
   }
-
-  const handleClick = (id) => {
-    setClickedId(id);
-  };
-
-  const handleDelete = (id, fileName) => {
-    projectFirestore
-      .collection("userData")
-      .doc(userId)
-      .collection("trips")
-      .doc(tripId)
-      .collection("images")
-      .doc(id)
-      .delete();
-    projectStorage.ref(fileName).delete();
-  };
 
   const changeHandler = (e) => {
     let selected = e.target.files[0];
@@ -173,42 +164,32 @@ const TripPage = () => {
           </div>
         </div>
       </form>
-      <div className="row">
-        {pics &&
-          pics.map((pic) => (
-            <div
-              className="col-lg-3 col-md-6 col-sm-12 img-container"
-              key={pic.id}
-            >
-              <motion.div
-                layout
-                whileHover={{ opacity: 1 }}
-                className="img-wrap"
-                onClick={() => handleClick(pic.id)}
-                data-bs-toggle="modal"
-                data-bs-target="#trip-img"
-              >
-                <motion.img
-                  src={pic.url}
-                  alt="my trip"
-                  data-bs-target="#trip-carousel"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5 }}
-                />
-              </motion.div>
-              <button
-                className="delete-img btn-close"
-                onClick={() => handleDelete(pic.id, pic.fileName)}
-              ></button>
-            </div>
-          ))}
-      </div>
+      <Images
+        tripData={tripData}
+        collectionRef={collectionRef}
+        setClickedId={setClickedId}
+      />
       <SelectedImage
         clickedId={clickedId}
         setClickedId={setClickedId}
-        pics={pics}
+        pics={tripData}
       />
+      <div className="mt-5 welcome">
+        <h3>
+          <u>Notes</u>
+        </h3>
+      </div>
+      <div className="d-flex align-items-center justify-content-center mt-3">
+        <button
+          className="trip-photo-label notes-label mb-5"
+          data-bs-toggle="modal"
+          data-bs-target="#notesModal"
+        >
+          <span>+</span>
+        </button>
+      </div>
+      <CreateNote tripId={tripId} />
+      <Notes tripId={tripId} collectionRef={collectionRef} />
     </div>
   );
 };

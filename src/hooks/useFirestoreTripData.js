@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { projectFirestore } from "../firebase";
 
-const useFirestoreImages = (id) => {
-  const [pics, setPics] = useState([]);
+const useFirestoreTripData = (id, collection) => {
+  const [tripData, setTripData] = useState([]);
   const { currentUser } = useAuth();
   const userId = currentUser.uid;
 
@@ -13,20 +13,20 @@ const useFirestoreImages = (id) => {
       .doc(userId)
       .collection("trips")
       .doc(id)
-      .collection("images")
+      .collection(collection)
       .orderBy("createdAt", "desc")
       .onSnapshot((snap) => {
-        let pictures = [];
-        snap.forEach((img) => {
-          pictures.push({ ...img.data(), id: img.id });
+        let documents = [];
+        snap.forEach((doc) => {
+          documents.push({ ...doc.data(), id: doc.id });
         });
-        setPics(pictures);
+        setTripData(documents);
       });
 
     return () => unsub();
-  }, [id, userId]);
+  }, [id, userId, collection]);
 
-  return { pics };
+  return { tripData };
 };
 
-export default useFirestoreImages;
+export default useFirestoreTripData;

@@ -66,6 +66,7 @@ const CreateTrip = () => {
                 value={formValues.tripName}
                 onChange={onChange}
                 name="tripName"
+                maxLength={80}
                 required
               />
             </div>
@@ -107,6 +108,7 @@ const CreateTrip = () => {
                 value={formValues.tripLocation}
                 onChange={onChange}
                 name="tripLocation"
+                maxLength={80}
                 required
               />
             </div>

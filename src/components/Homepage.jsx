@@ -5,7 +5,7 @@ const Homepage = () => {
     <div className="container-fluid w-75">
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div className="container-fluid mt-3">
-          <a className="navbar-brand mb-0 h1" href="/">
+          <h1 className="navbar-brand mb-0" href="/">
             <img
               src="../images/travel-app.png"
               alt=""
@@ -14,7 +14,7 @@ const Homepage = () => {
               className="d-inline-block align-text-top"
             />
             Travel Pal
-          </a>
+          </h1>
           <button
             className="navbar-toggler"
             type="button"
@@ -79,9 +79,9 @@ const Homepage = () => {
         <div className="col-lg-6 p-lg-5 mt-lg-5 mt-3 mt-sm-1 text-center">
           <h2>Create your trip and start uploading pictures</h2>
           <p className="h5">
-            First come up with a name for the trip. Then you can upload a cover
-            photo. Next upload pictures as you go. You can add captions as well
-            to remember each moment.
+            First come up with a name for the trip. Then pick a cover photo. Add
+            some additional details. Next upload pictures as you go. You can add
+            captions as well to remember each moment.
           </p>
         </div>
         <div className="col-lg-6 p-lg-4 order-lg-2">
@@ -110,11 +110,11 @@ const Homepage = () => {
           />
         </div>
         <div className="col-lg-6 p-lg-5 mt-lg-5 mt-3 order-lg-4 text-center">
-          <h2>Share your trips with friends and family</h2>
+          <h2>Show your trips to friends and family</h2>
           <p className="h5">
-            Why keep all the fun to yourself? Easily share your experiences with
-            your friends and family. They will thank you for giving them the
-            inside scoop on future travel destinations!
+            Show off your newly created trips to your friends and family. They
+            will thank you for giving them the inside scoop on future travel
+            destinations! Have fun!
           </p>
         </div>
       </div>

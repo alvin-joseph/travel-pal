@@ -32,7 +32,7 @@ const SelectedImage = ({ clickedId, setClickedId, pics }) => {
               onClick={handleClick}
             ></button>
           </div>
-          <div className="modal-body">
+          <div className="modal-body trip-img-body">
             <div
               id="trip-carousel"
               className="carousel slide carousel-fade"
@@ -52,6 +52,9 @@ const SelectedImage = ({ clickedId, setClickedId, pics }) => {
                         src={pic.url}
                         alt="full-size"
                       />
+                      <div className="carousel-caption d-block">
+                        <h5>{pic.caption}</h5>
+                      </div>
                     </div>
                   ))}
               </div>
