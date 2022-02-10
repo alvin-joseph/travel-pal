@@ -28,7 +28,7 @@ const Navbar = () => {
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-transparent">
         <div className="container-fluid mt-3">
-          <h2 className="navbar-brand mb-0">
+          <h2 className="navbar-brand mb-0 trip-nav">
             <img
               src="../images/travel-app.png"
               alt=""
