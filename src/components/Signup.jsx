@@ -1,6 +1,7 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { useStateIfMounted } from "use-state-if-mounted";
 
 const Signup = () => {
   const initialFormValues = {
@@ -8,13 +9,10 @@ const Signup = () => {
     password: "",
     passwordConfirm: "",
   };
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
-  const { signup, currentUser } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const { signup } = useAuth();
+  const [error, setError] = useStateIfMounted("");
+  const [loading, setLoading] = useStateIfMounted(false);
+  const [formValues, setFormValues] = useStateIfMounted(initialFormValues);
   const navigate = useNavigate();
 
   const onChange = (e) => {
@@ -27,21 +25,21 @@ const Signup = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+    if (formValues.password !== formValues.passwordConfirm) {
       return setError("Passwords do not match");
     }
 
     try {
       setError("");
       setLoading(true);
-      await signup(emailRef.current.value.trim(), passwordRef.current.value);
-      navigate(`/dashboard/${currentUser.uid}`);
-    } catch {
-      setError("Failed to create account");
+      await signup(formValues.email.trim(), formValues.password);
+      navigate(`/login`);
+      setFormValues(initialFormValues);
+    } catch (e) {
+      setError(e.message);
     }
 
     setLoading(false);
-    setFormValues(initialFormValues);
   }
 
   return (
@@ -55,7 +53,6 @@ const Signup = () => {
               <input
                 id="email-input"
                 type="email"
-                ref={emailRef}
                 className="form-control"
                 value={formValues.email}
                 onChange={onChange}
@@ -71,7 +68,6 @@ const Signup = () => {
               <input
                 id="password-input"
                 type="password"
-                ref={passwordRef}
                 className="form-control"
                 value={formValues.password}
                 onChange={onChange}
@@ -86,7 +82,6 @@ const Signup = () => {
               <input
                 id="password-confirm-input"
                 type="password"
-                ref={passwordConfirmRef}
                 className="form-control"
                 value={formValues.passwordConfirm}
                 onChange={onChange}

@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 const Login = () => {
   const initialFormValues = {
     email: "",
     password: "",
   };
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login, currentUser } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [formValues, setFormValues] = useState(initialFormValues);
+  const { login } = useAuth();
+  const [error, setError] = useStateIfMounted("");
+  const [loading, setLoading] = useStateIfMounted(false);
+  const [formValues, setFormValues] = useStateIfMounted(initialFormValues);
   const navigate = useNavigate();
 
   const onChange = (e) => {
@@ -28,22 +28,29 @@ const Login = () => {
     try {
       setError("");
       setLoading(true);
-      await login(emailRef.current.value.trim(), passwordRef.current.value);
-      const id = currentUser.uid;
-      navigate(`/dashboard/${id}`);
+      await login(formValues.email.trim(), formValues.password);
       setFormValues(initialFormValues);
-    } catch {
-      setError("Failed to login");
+      const unsub = auth.onAuthStateChanged((authObj) => {
+        unsub();
+        if (authObj) {
+          navigate(`/dashboard/${authObj.uid}`);
+        }
+      });
+    } catch (e) {
+      setError(e.message);
     }
 
     setLoading(false);
   }
 
   useEffect(() => {
-    const email = emailRef.current.value;
-    const password = passwordRef.current.value;
-    return () => login(email.trim(), password);
-  }, [login]);
+    const unsub = auth.onAuthStateChanged((authObj) => {
+      unsub();
+      if (authObj) {
+        navigate(`/dashboard/${authObj.uid}`);
+      }
+    });
+  }, [navigate]);
 
   return (
     <div className="container d-flex align-items-center justify-content-center account">
@@ -56,7 +63,6 @@ const Login = () => {
               <input
                 id="email-input"
                 type="email"
-                ref={emailRef}
                 className="form-control"
                 value={formValues.email}
                 onChange={onChange}
@@ -69,7 +75,6 @@ const Login = () => {
               <input
                 id="password-input"
                 type="password"
-                ref={passwordRef}
                 className="form-control"
                 value={formValues.password}
                 onChange={onChange}

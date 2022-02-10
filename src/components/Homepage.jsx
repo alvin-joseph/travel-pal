@@ -109,7 +109,7 @@ const Homepage = () => {
             className="w-100 mt-4 shadow p-1 bg-white rounded img3"
           />
         </div>
-        <div className="col-lg-6 p-lg-5 mt-lg-5 mt-3 order-lg-4 text-center">
+        <div className="col-lg-6 p-lg-5 mt-lg-5 mt-3 order-lg-4 text-center mb-5">
           <h2>Show your trips to friends and family</h2>
           <p className="h5">
             Show off your newly created trips to your friends and family. They

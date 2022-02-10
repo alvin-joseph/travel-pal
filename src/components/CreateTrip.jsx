@@ -57,19 +57,6 @@ const CreateTrip = () => {
         <div className="card-body">
           <h5 className="card-title text-center">Create your trip!</h5>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="tripName">Trip Name</label>
-              <input
-                id="tripName"
-                type="text"
-                className="form-control"
-                value={formValues.tripName}
-                onChange={onChange}
-                name="tripName"
-                maxLength={80}
-                required
-              />
-            </div>
             <div className="row">
               <div className="form-group col-6">
                 <label htmlFor="tripCoverPhoto" className="w-100 mt-3">
@@ -98,6 +85,19 @@ const CreateTrip = () => {
                   alt="trip cover"
                 />
               </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tripName">Trip Name</label>
+              <input
+                id="tripName"
+                type="text"
+                className="form-control"
+                value={formValues.tripName}
+                onChange={onChange}
+                name="tripName"
+                maxLength={80}
+                required
+              />
             </div>
             <div className="form-group mt-3">
               <label htmlFor="tripLocation">Trip location</label>

@@ -62,7 +62,14 @@ const EditTrip = () => {
   async function handleSubmit(e) {
     e.preventDefault();
     docRef.update({ createdAt: timestamp() });
-    await docRef.update({ ...formValues, coverPhotoUrl });
+    await docRef.update({
+      tripName: formValues.tripName,
+      tripLocation: formValues.tripLocation,
+      tripStartDate: formValues.tripStartDate,
+      tripEndDate: formValues.tripEndDate,
+      coverPhoto: formValues.coverPhoto,
+      coverPhotoUrl,
+    });
     setFormValues(initialFormValues);
     setCoverPhotoUrl(null);
     navigate(`/dashboard/${id}`);
@@ -74,18 +81,6 @@ const EditTrip = () => {
         <div className="card-body">
           <h5 className="card-title text-center">Edit your trip</h5>
           <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="tripName">Trip Name</label>
-              <input
-                id="tripName"
-                type="text"
-                className="form-control"
-                value={formValues.tripName}
-                onChange={onChange}
-                name="tripName"
-                required
-              />
-            </div>
             <div className="row">
               <div className="form-group col-6">
                 <label htmlFor="tripCoverPhoto" className="w-100 mt-3">
@@ -114,6 +109,18 @@ const EditTrip = () => {
                   alt="trip cover"
                 />
               </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="tripName">Trip Name</label>
+              <input
+                id="tripName"
+                type="text"
+                className="form-control"
+                value={formValues.tripName}
+                onChange={onChange}
+                name="tripName"
+                required
+              />
             </div>
             <div className="form-group mt-3">
               <label htmlFor="tripLocation">Trip location</label>
