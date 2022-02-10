@@ -7,6 +7,8 @@ import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
 import CreateTrip from "./components/CreateTrip";
 import TripPage from "./components/TripPage";
+import AddUsername from "./components/AddUsername";
+import EditUsername from "./components/EditUsername";
 import { Routes, Route } from "react-router-dom";
 import PrivateRoute from "./components/PrivateRoute";
 import EditTrip from "./components/EditTrip";
@@ -48,6 +50,22 @@ function App() {
             element={
               <PrivateRoute>
                 <UpdateProfile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/add-username"
+            element={
+              <PrivateRoute>
+                <AddUsername />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/edit-username"
+            element={
+              <PrivateRoute>
+                <EditUsername />
               </PrivateRoute>
             }
           />

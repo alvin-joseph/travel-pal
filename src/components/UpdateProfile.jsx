@@ -1,4 +1,5 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
+import { useStateIfMounted } from "use-state-if-mounted";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,8 +8,8 @@ const UpdateProfile = () => {
   const passwordRef = useRef();
   const passwordConfirmRef = useRef();
   const { currentUser, updateEmail, updatePassword } = useAuth();
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [error, setError] = useStateIfMounted("");
+  const [loading, setLoading] = useStateIfMounted(false);
   const navigate = useNavigate();
   const id = currentUser.uid;
 
@@ -22,7 +23,7 @@ const UpdateProfile = () => {
     setLoading(true);
     setError("");
     if (emailRef.current.value !== currentUser.email) {
-      promises.push(updateEmail(emailRef.current.value));
+      promises.push(updateEmail(emailRef.current.value.trim()));
     }
     if (passwordRef.current.value) {
       promises.push(updatePassword(passwordRef.current.value));

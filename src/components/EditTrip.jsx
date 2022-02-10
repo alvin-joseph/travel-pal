@@ -19,7 +19,7 @@ const EditTrip = () => {
   const id = currentUser.uid;
   const [formValues, setFormValues] = useState(initialFormValues);
   const { tripId } = useParams();
-  const { docs } = useFirestore();
+  const { docs } = useFirestore("trips");
   const docRef = projectFirestore
     .collection("userData")
     .doc(id)

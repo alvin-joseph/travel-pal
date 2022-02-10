@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { projectFirestore } from "../firebase";
 
-const useFirestore = (collection) => {
-  const [docs, setDocs] = useState([]);
+const useFirestoreUserData = () => {
+  const [userInfo, setUserInfo] = useState([]);
   const { currentUser } = useAuth();
   const id = currentUser.uid;
 
@@ -11,19 +11,18 @@ const useFirestore = (collection) => {
     const unsub = projectFirestore
       .collection("userData")
       .doc(id)
-      .collection(collection)
-      .orderBy("createdAt", "desc")
+      .collection("userInfo")
       .onSnapshot((snap) => {
-        let documents = [];
+        let information = [];
         snap.forEach((doc) => {
-          documents.push({ ...doc.data(), id: doc.id });
+          information.push({ ...doc.data(), id: doc.id });
         });
-        setDocs(documents);
+        setUserInfo(information);
       });
 
     return () => unsub();
-  }, [id, collection]);
-  return { docs };
+  }, [id]);
+  return { userInfo };
 };
 
-export default useFirestore;
+export default useFirestoreUserData;
